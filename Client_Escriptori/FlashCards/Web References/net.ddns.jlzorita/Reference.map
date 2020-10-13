@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<DiscoveryClientResultsFile xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Results>
+    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.ContractReference" url="http://jlzorita.ddns.net:8080/WebService_flashcats/WebService_flashcats?wsdl" filename="WebService_flashcats.wsdl" />
+    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.SchemaReference" url="http://jlzorita.ddns.net:8080/WebService_flashcats/WebService_flashcats?xsd=1" filename="WebService_flashcats.xsd" />
+  </Results>
+</DiscoveryClientResultsFile>
