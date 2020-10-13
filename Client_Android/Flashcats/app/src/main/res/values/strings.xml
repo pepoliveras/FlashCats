@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Flashcat</string>
+    <string name="text_button">Provar connexió</string>
+    <string name="missatge">Hello World!</string>
+</resources>
