@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<definitions xmlns:wsp="http://www.w3.org/ns/ws-policy" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:tns="http://webservice_package/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsp1_2="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" name="WebService_flashcats" targetNamespace="http://webservice_package/" xmlns="http://schemas.xmlsoap.org/wsdl/">
+  <types>
+    <xsd:schema>
+      <xsd:import schemaLocation="http://jlzorita.ddns.net:8080/WebService_flashcats/WebService_flashcats?xsd=1" namespace="http://webservice_package/" />
+    </xsd:schema>
+  </types>
+  <message name="logout">
+    <part name="parameters" element="tns:logout" />
+  </message>
+  <message name="logoutResponse">
+    <part name="parameters" element="tns:logoutResponse" />
+  </message>
+  <message name="responMissatge">
+    <part name="parameters" element="tns:responMissatge" />
+  </message>
+  <message name="responMissatgeResponse">
+    <part name="parameters" element="tns:responMissatgeResponse" />
+  </message>
+  <message name="login">
+    <part name="parameters" element="tns:login" />
+  </message>
+  <message name="loginResponse">
+    <part name="parameters" element="tns:loginResponse" />
+  </message>
+  <portType name="WebService_flashcats">
+    <operation name="logout">
+      <input wsam:Action="http://webservice_package/WebService_flashcats/logoutRequest" message="tns:logout" />
+      <output wsam:Action="http://webservice_package/WebService_flashcats/logoutResponse" message="tns:logoutResponse" />
+    </operation>
+    <operation name="responMissatge">
+      <input wsam:Action="http://webservice_package/WebService_flashcats/responMissatgeRequest" message="tns:responMissatge" />
+      <output wsam:Action="http://webservice_package/WebService_flashcats/responMissatgeResponse" message="tns:responMissatgeResponse" />
+    </operation>
+    <operation name="login">
+      <input wsam:Action="http://webservice_package/WebService_flashcats/loginRequest" message="tns:login" />
+      <output wsam:Action="http://webservice_package/WebService_flashcats/loginResponse" message="tns:loginResponse" />
+    </operation>
+  </portType>
+  <binding name="WebService_flashcatsPortBinding" type="tns:WebService_flashcats">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <operation name="logout">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" />
+      </input>
+      <output>
+        <soap:body use="literal" />
+      </output>
+    </operation>
+    <operation name="responMissatge">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" />
+      </input>
+      <output>
+        <soap:body use="literal" />
+      </output>
+    </operation>
+    <operation name="login">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" />
+      </input>
+      <output>
+        <soap:body use="literal" />
+      </output>
+    </operation>
+  </binding>
+  <service name="WebService_flashcats">
+    <port name="WebService_flashcatsPort" binding="tns:WebService_flashcatsPortBinding">
+      <soap:address location="http://jlzorita.ddns.net:8080/WebService_flashcats/WebService_flashcats" />
+    </port>
+  </service>
+</definitions>
