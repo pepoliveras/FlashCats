@@ -102,7 +102,7 @@ public class LoginActivity extends AppCompatActivity {
                     // i li passem la referència de lobjecrte que la crida
                     // per fer el retorn dels paràmetres de forma també asíncrona.
                     new WebServiceClient().execute(usernameEditText.getText().toString(),passwordEditText.getText().toString());
-                    
+
                     // Cridem a la següent pantalla
                     Handler handler = new Handler();
                     handler.postDelayed(new Runnable() {
