@@ -1,5 +1,7 @@
 package com.flashcats.data;
 
+import android.os.CountDownTimer;
+
 import com.flashcats.data.model.LoggedInUser;
 
 /**
@@ -32,9 +34,9 @@ public class LoginRepository {
         return user != null;
     }
 
-    public void logout() {
+    public void logout(String clau_sessio) {
+        dataSource.logout(clau_sessio);
         user = null;
-        dataSource.logout();
     }
 
     private void setLoggedInUser(LoggedInUser user) {
@@ -46,6 +48,7 @@ public class LoginRepository {
     public Result<LoggedInUser> login(String username, String password) {
         // handle login
         Result<LoggedInUser> result = dataSource.login(username, password);
+
         if (result instanceof Result.Success) {
             setLoggedInUser(((Result.Success<LoggedInUser>) result).getData());
         }
