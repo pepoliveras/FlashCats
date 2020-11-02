@@ -137,7 +137,9 @@ public class LoginActivity extends AppCompatActivity {
                 loadingProgressBar.setVisibility(View.VISIBLE);
 
                 // fem login ...
+                System.out.println("LoginActivity: Abans de cridar loginViewModel.login");
                 loginViewModel.login(usernameEditText.getText().toString(),passwordEditText.getText().toString());
+                System.out.println("LoginActivity: Després de cridar loginViewModel.login");
             }
         });
     }

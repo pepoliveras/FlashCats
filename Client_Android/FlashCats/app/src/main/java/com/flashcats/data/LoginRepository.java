@@ -47,7 +47,10 @@ public class LoginRepository {
 
     public Result<LoggedInUser> login(String username, String password) {
         // handle login
+
+        System.out.println("LoginRepository: Abans de cridar dataSource.login");
         Result<LoggedInUser> result = dataSource.login(username, password);
+        System.out.println("LoginRepository: Després de cridar dataSource.login");
 
         if (result instanceof Result.Success) {
             setLoggedInUser(((Result.Success<LoggedInUser>) result).getData());
