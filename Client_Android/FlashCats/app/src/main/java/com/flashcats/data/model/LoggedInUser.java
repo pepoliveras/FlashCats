@@ -5,8 +5,8 @@ package com.flashcats.data.model;
  */
 public class LoggedInUser {
 
-    private String userId;
-    private String displayName;
+    private String userId; // codi de sessió
+    private String displayName; // nom d'usuari
 
     public LoggedInUser(String userId, String displayName) {
         this.userId = userId;

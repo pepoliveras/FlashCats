@@ -35,19 +35,14 @@ public class LoginViewModel extends ViewModel {
     }
 
     public void login(String username, String password) {
-        // can be launched in a separate asynchronous job
-        System.out.println("loginViewModel: Abans de cridar (Async)loginRepository.login");
         try {
+            //fem la crida asíncrona al webservice i esperem el seu retorn
             result = new login_async().execute(username, password).get();
         } catch (ExecutionException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        System.out.println("loginViewModel: Després de cridar (Async)loginRepository.login");
-
-        //esperem aquí ?
-
 
         if (result instanceof Result.Success) {
             LoggedInUser data = ((Result.Success<LoggedInUser>) result).getData();
@@ -86,9 +81,7 @@ public class LoginViewModel extends ViewModel {
 
     public void logout(String clau_sessio) {
         // can be launched in a separate asynchronous job
-        System.out.println("loginViewModel: Abans de cridar (Async)loginRepository.logout");
         new logout_async().execute(clau_sessio);
-        System.out.println("loginViewModel: Després de cridar (Async)loginRepository.logout");
     }
 
     private class login_async extends AsyncTask<String, Void, Result<LoggedInUser> > {
@@ -102,8 +95,6 @@ public class LoginViewModel extends ViewModel {
         protected void onPostExecute(Result<LoggedInUser> login_result) {
             result = login_result;
         }
-
-
     }
 
     private class logout_async extends AsyncTask<String, Void, Void> {

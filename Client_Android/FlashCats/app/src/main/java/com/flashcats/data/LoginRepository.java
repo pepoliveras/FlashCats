@@ -16,7 +16,7 @@ public class LoginRepository {
 
     // If user credentials will be cached in local storage, it is recommended it be encrypted
     // @see https://developer.android.com/training/articles/keystore
-    private LoggedInUser user = null;
+    private static LoggedInUser user = null;
 
     // private constructor : singleton access
     private LoginRepository(LoginDataSource dataSource) {
@@ -28,6 +28,10 @@ public class LoginRepository {
             instance = new LoginRepository(dataSource);
         }
         return instance;
+    }
+
+    public static LoggedInUser getUser(){
+        return user;
     }
 
     public boolean isLoggedIn() {
@@ -48,9 +52,7 @@ public class LoginRepository {
     public Result<LoggedInUser> login(String username, String password) {
         // handle login
 
-        System.out.println("LoginRepository: Abans de cridar dataSource.login");
         Result<LoggedInUser> result = dataSource.login(username, password);
-        System.out.println("LoginRepository: Després de cridar dataSource.login");
 
         if (result instanceof Result.Success) {
             setLoggedInUser(((Result.Success<LoggedInUser>) result).getData());

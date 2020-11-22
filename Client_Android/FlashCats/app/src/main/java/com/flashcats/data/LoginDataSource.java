@@ -31,8 +31,8 @@ public class LoginDataSource {
 
     LoggedInUser usuari;
 
-    private String URL = "http://jlzorita.ddns.net:8080/WebService_flashcats/WebService_flashcats?wsdl";
-    private String NAMESPACE = "http://webservice_package/";
+    private final static String URL = "http://jlzorita.ddns.net:8080/WebService_flashcats/WebService_flashcats?wsdl";
+    private final static String NAMESPACE = "http://webservice_package/";
     private String METHOD_NAME = "login";
     private String SOAP_ACTION = "";
 
@@ -40,12 +40,7 @@ public class LoginDataSource {
 
         try {
 
-            System.out.println("LoginDataSource: Abans de cridar LoginDataSource.login");
-
             webservice_call("login",username,password);
-
-            System.out.println("LoginDataSource: Després de cridar LoginDataSource.login");
-
             usuari = new LoggedInUser(clau_sessio,username);
 
             // Si retorn ok
