@@ -20,7 +20,7 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.flashcats.ui.pantalles.PantallaPrincipal;
+import com.flashcats.ui.pantalles.user.PantallaPrincipal;
 import com.flashcats.R;
 
 public class LoginActivity extends AppCompatActivity {
@@ -103,27 +103,12 @@ public class LoginActivity extends AppCompatActivity {
         usernameEditText.addTextChangedListener(afterTextChangedListener);
         passwordEditText.addTextChangedListener(afterTextChangedListener);
 
-        /*passwordEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    loginViewModel.login(usernameEditText.getText().toString(),
-                            passwordEditText.getText().toString());
-                }
-                return false;
-            }
-        });*/
-
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 loadingProgressBar.setVisibility(View.VISIBLE);
-
                 // fem login ...
-                System.out.println("LoginActivity: Abans de cridar loginViewModel.login");
                 loginViewModel.login(usernameEditText.getText().toString(),passwordEditText.getText().toString());
-                System.out.println("LoginActivity: Després de cridar loginViewModel.login");
             }
         });
     }
@@ -148,7 +133,6 @@ public class LoginActivity extends AppCompatActivity {
         extras.putString("param1", model.getSessionId());
         extras.putString("param2", model.getDisplayName());
         intent.putExtras(extras);
-
         startActivity(intent,extras);
     }
 }

@@ -13,37 +13,43 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.flashcats.R;
+import com.flashcats.data.FlashCardsRepository;
 import com.flashcats.data.LoginRepository;
 import com.flashcats.data.TemesRepository;
+import com.flashcats.data.model.TemaFlashCard;
 import com.flashcats.ui.masterDetail.FlashCardListActivity;
 import com.flashcats.ui.masterDetail.TemaListActivity;
 
-public class PantallaAfegirTema extends AppCompatActivity {
+public class PantallaAfegirFlashCard extends AppCompatActivity {
 
     private String clau_sessio;
     private String nom_user;
     private int tipus_usuari;
+    private String codi_tema;
 
     private Button button_tornar;
-    private Button button_afegirTema;
+    private Button button_afegir;
     private TextView nom_usuari;
-    private EditText txt_nomTema;
-    private EditText txt_descripcioTema;
+    private TextView nom_tema;
+    private EditText txt_anvers;
+    private EditText txt_revers;
 
-    private TemesRepository temesRepository;
+    private FlashCardsRepository flashCardsRepository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_pantalla_afegir_tema);
+        setContentView(R.layout.activity_pantalla_afegir_flashcard);
 
-        temesRepository = new TemesRepository();
+        flashCardsRepository = new FlashCardsRepository();
+        codi_tema = flashCardsRepository.codi_tema;
 
-        nom_usuari = findViewById(R.id.nom_usuari);
-        button_tornar = findViewById(R.id.button_tornar);
-        button_afegirTema = findViewById(R.id.button_afegirTema);
-        txt_nomTema = findViewById(R.id.txt_nomTema);
-        txt_descripcioTema = findViewById(R.id.txt_descripcioTema);
+        nom_usuari = findViewById(R.id.nom_usuari_afegir_flashcard);
+        nom_tema = findViewById(R.id.nom_tema_afegir_flashcard);
+        button_tornar = findViewById(R.id.button_tornar_afegir_flashcard);
+        button_afegir = findViewById(R.id.button_afegir_afegir_flashcard);
+        txt_anvers = findViewById(R.id.txt_anvers_afegir_flashcard);
+        txt_revers = findViewById(R.id.txt_revers_afegir_flashcard);
 
         nom_user = LoginRepository.getUser().getDisplayName();
         clau_sessio = LoginRepository.getUser().getUserId();
@@ -55,9 +61,12 @@ public class PantallaAfegirTema extends AppCompatActivity {
             tipus_usuari = 1; // perfil admin
         }
 
+        TemaFlashCard tema_sup = TemesRepository.ITEM_MAP.get(codi_tema);
+        nom_tema.setText("Tema: " + tema_sup.getNom());
+
         /*// Mostrem fletxa de retorn a la action bar.
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        //setSupportActionBar(toolbar);
 
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -68,29 +77,28 @@ public class PantallaAfegirTema extends AppCompatActivity {
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), TemaListActivity.class));
+                startActivity(new Intent(getApplicationContext(), FlashCardListActivity.class));
             }
         });*/
 
-        button_afegirTema.setOnClickListener(new View.OnClickListener() {
+        button_afegir.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 int result = -1;
-                result = temesRepository.altaTema(clau_sessio,txt_nomTema.getText().toString(),txt_descripcioTema.getText().toString());
+                result = flashCardsRepository.altaFlashCard(clau_sessio,codi_tema,txt_anvers.getText().toString(),txt_revers.getText().toString());
 
                 if (result > -1) {
-                    Toast.makeText(getApplicationContext(), "Tema afegit", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "FlashCard afegit", Toast.LENGTH_LONG).show();
                 } else if (result == -1) {
                     Toast.makeText(getApplicationContext(), "Error d'usuari o permisos", Toast.LENGTH_LONG).show();
                 } else if (result == -2) {
-                    Toast.makeText(getApplicationContext(), "Aquest tema ja existeix", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "Aquest FlashCard ja existeix", Toast.LENGTH_LONG).show();
                 } else if (result == -3) {
                     Toast.makeText(getApplicationContext(), "Error de la Base de Dades", Toast.LENGTH_LONG).show();
                 }
 
                 segPntalla("tornar");
-
             }
         });
 
@@ -101,6 +109,7 @@ public class PantallaAfegirTema extends AppCompatActivity {
                 segPntalla("tornar");
             }
         });
+
     }
 
     private void segPntalla(String action) {
@@ -108,7 +117,7 @@ public class PantallaAfegirTema extends AppCompatActivity {
         Bundle extras = new Bundle();
 
         if (action.compareTo("tornar") == 0) {
-            Intent intent = new Intent(this, TemaListActivity.class);
+            Intent intent = new Intent(this, FlashCardListActivity.class);
             startActivity(intent);
         }
     }

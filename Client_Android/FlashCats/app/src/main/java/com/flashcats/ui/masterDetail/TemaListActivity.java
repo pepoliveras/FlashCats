@@ -1,4 +1,4 @@
-package com.flashcats.ui;
+package com.flashcats.ui.masterDetail;
 
 import android.content.Context;
 import android.content.Intent;
@@ -11,6 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.RecyclerView;
@@ -19,6 +20,7 @@ import com.flashcats.R;
 import com.flashcats.data.LoginRepository;
 import com.flashcats.data.TemesRepository;
 import com.flashcats.data.model.TemaFlashCard;
+import com.flashcats.ui.pantalles.user.PantallaPrincipal;
 import com.flashcats.ui.pantalles.admin.PantallaAfegirTema;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -46,8 +48,8 @@ public class TemaListActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_tema_list);
 
         nom_user = LoginRepository.getUser().getDisplayName();
         clau_sessio = LoginRepository.getUser().getUserId();
@@ -58,8 +60,6 @@ public class TemaListActivity extends AppCompatActivity {
             tipus_usuari = 1; // perfil admin
         }
 
-        setContentView(R.layout.activity_tema_list);
-
         temesRepository = new TemesRepository();
         temesRepository.obtenirTemes(clau_sessio);
 
@@ -67,7 +67,20 @@ public class TemaListActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         toolbar.setTitle(getTitle());
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.float_add);
+        // Mostrem fletxa de retorn a la action bar.
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
+        // I definim que al clicar tornem  PantallaPrincipal
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), PantallaPrincipal.class));
+            }
+        });
+
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.float_add_tema);
 
         if (tipus_usuari == 0) {
             fab.setVisibility(View.INVISIBLE);
@@ -105,23 +118,11 @@ public class TemaListActivity extends AppCompatActivity {
             Intent intent = new Intent(this, PantallaAfegirTema.class);
             Toast.makeText(getApplicationContext(), "Afegir Tema Nou", Toast.LENGTH_LONG).show();
             startActivity(intent);
-        } else if (action.compareTo("llista_temes")==0) {
-            Intent intent = new Intent(this, TemaListActivity.class);
-            Toast.makeText(getApplicationContext(), "Selecció de Temes", Toast.LENGTH_LONG).show();
-            startActivity(intent);
-        } else if (action.compareTo("config_admin")==0) {
-            //Intent intent = new Intent(this, PantallaAdminTemes.class);
-            Toast.makeText(getApplicationContext(), "Configuració d'usuaris", Toast.LENGTH_LONG).show();
-            //startActivity(intent);
-        } else if (action.compareTo("llista_flashcards")==0) {
-            //Intent intent = new Intent(this, PantallaAdminTemes.class);
-            Toast.makeText(getApplicationContext(), "Llista de FlashCards", Toast.LENGTH_LONG).show();
-            //startActivity(intent);
         }
     }
 
     private void setupRecyclerView(@NonNull RecyclerView recyclerView) {
-        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(this, TemesRepository.ITEMS, mTwoPane));
+        recyclerView.setAdapter(new SimpleItemRecyclerViewAdapter(this, temesRepository.ITEMS, mTwoPane));
     }
 
     public static class SimpleItemRecyclerViewAdapter
@@ -144,7 +145,7 @@ public class TemaListActivity extends AppCompatActivity {
                     mParentActivity.getSupportFragmentManager().beginTransaction()
                             .replace(R.id.tema_detail_container, fragment)
                             .commit();
-                } else { // si estem en mode dispositiu mòbil canvi de pantalla
+                } else { // si estem en mode dispositiu mòbil fem canvi de pantalla
                     Context context = view.getContext();
                     Intent intent = new Intent(context, TemaDetailActivity.class);
                     intent.putExtra(TemaDetailFragment.ARG_ITEM_ID, item.getCodi());

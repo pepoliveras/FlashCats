@@ -11,4 +11,6 @@
     <string name="login_failed">"Login failed"</string>
     <string name="title_tema_list">Temes</string>
     <string name="title_tema_detail">Detall Tema</string>
+    <string name="title_flashcard_list">FlashCards</string>
+    <string name="title_flashcard_detail">FlashCard Detail</string>
 </resources>

@@ -11,40 +11,46 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.flashcats.R;
+import com.flashcats.data.FlashCardsRepository;
 import com.flashcats.data.LoginRepository;
 import com.flashcats.data.TemesRepository;
+import com.flashcats.data.model.FlashCard;
 import com.flashcats.data.model.TemaFlashCard;
-import com.flashcats.ui.masterDetail.TemaListActivity;
+import com.flashcats.ui.masterDetail.FlashCardListActivity;
 
-public class PantallaModificarTema extends AppCompatActivity {
+public class PantallaModificarFlashCard extends AppCompatActivity {
 
     private String clau_sessio;
     private String nom_user;
     private int tipus_usuari;
-    private String codi_tema_modificar;
+    private String codi_tema;
+    private String codi_flashcard_modificar;
 
     private Button button_tornar;
-    private Button button_modificarTema;
+    private Button button_modificar;
     private TextView nom_usuari;
-    private TextView codi_tema;
-    private EditText txt_nomTema;
-    private EditText txt_descripcioTema;
+    private TextView nom_tema;
+    private TextView camp_codi_flashcard;
+    private EditText txt_anvers;
+    private EditText txt_revers;
 
-    private TemesRepository temesRepository;
+    private FlashCardsRepository flashCardsRepository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_pantalla_modificar_tema);
+        setContentView(R.layout.activity_pantalla_modificar_flashcard);
 
-        temesRepository = new TemesRepository();
+        flashCardsRepository = new FlashCardsRepository();
+        codi_tema = flashCardsRepository.codi_tema;
 
-        nom_usuari = findViewById(R.id.nom_usuari);
-        button_tornar = findViewById(R.id.button_tornar);
-        button_modificarTema = findViewById(R.id.button_modificarTema);
-        txt_nomTema = findViewById(R.id.txt_nomTema);
-        txt_descripcioTema = findViewById(R.id.txt_descripcioTema);
-        codi_tema = findViewById(R.id.codiTema);
+        nom_usuari = findViewById(R.id.nom_usuari_modificar_flashcard);
+        nom_tema = findViewById(R.id.nom_tema_modificar_flashcard);
+        camp_codi_flashcard = findViewById(R.id.codi_flashcard_modificar_flashcard);
+        button_tornar = findViewById(R.id.button_tornar_modificar_flashcard);
+        button_modificar = findViewById(R.id.button_modificar_modificar_flashcard);
+        txt_anvers = findViewById(R.id.txt_anvers_modificar_flashcard);
+        txt_revers = findViewById(R.id.txt_revers_modificar_flashcard);
 
         nom_user = LoginRepository.getUser().getDisplayName();
         clau_sessio = LoginRepository.getUser().getUserId();
@@ -56,40 +62,42 @@ public class PantallaModificarTema extends AppCompatActivity {
             tipus_usuari = 1; // perfil admin
         }
 
+        TemaFlashCard tema_sup = TemesRepository.ITEM_MAP.get(codi_tema);
+        nom_tema.setText("Tema: " + tema_sup.getNom());
+
         // Recuperem l'intent que ens ha cridat i extraiem els paràmetres que ens ha passat
         Bundle params = this.getIntent().getExtras();
 
         if(params !=null) {
-            codi_tema_modificar = params.getString("param1");
-            codi_tema.setText("codi del tema: " + codi_tema_modificar);
+            codi_flashcard_modificar = params.getString("param1");
+            camp_codi_flashcard.setText("codi de la flashcard: " + codi_flashcard_modificar);
         }
 
-        TemaFlashCard tema_modificar = temesRepository.ITEM_MAP.get(codi_tema_modificar);
+        FlashCard flashCard_modificar = flashCardsRepository.ITEM_MAP.get(codi_flashcard_modificar);
 
-        if(tema_modificar != null) {
-            txt_nomTema.setText(tema_modificar.getNom());
-            txt_descripcioTema.setText(tema_modificar.getDescripcio());
+        if(flashCard_modificar != null) {
+            txt_anvers.setText(flashCard_modificar.getAnvers_text());
+            txt_revers.setText(flashCard_modificar.getRevers_text());
         }
 
-        button_modificarTema.setOnClickListener(new View.OnClickListener() {
+        button_modificar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 //en teoria un usuari no admin no hauria d'arribar aquí però per si de cas ...
                 if(tipus_usuari == 1) {
                     int result = -1;
-                    result = temesRepository.modificaTema(clau_sessio,codi_tema_modificar,txt_nomTema.getText().toString(),txt_descripcioTema.getText().toString());
+                    result = flashCardsRepository.modificaFlashCard(clau_sessio,codi_flashcard_modificar,txt_anvers.getText().toString(),txt_revers.getText().toString());
 
                     if (result > -1) {
-                        Toast.makeText(getApplicationContext(), "Tema Modificat", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), "FlashCard Modificat", Toast.LENGTH_LONG).show();
                     } else if (result == -1) {
                         Toast.makeText(getApplicationContext(), "Error d'usuari o permisos", Toast.LENGTH_LONG).show();
                     } else if (result == -2) {
-                        Toast.makeText(getApplicationContext(), "Aquest nom de tema ja existeix", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), "Aquest nom de Flashcard ja existeix", Toast.LENGTH_LONG).show();
                     } else if (result == -3) {
                         Toast.makeText(getApplicationContext(), "Error de la Base de Dades", Toast.LENGTH_LONG).show();
                     }
-
                     segPntalla("tornar");
                 } else {
                     Toast.makeText(getApplicationContext(), "L'usuari no té permisos", Toast.LENGTH_LONG).show();
@@ -111,7 +119,7 @@ public class PantallaModificarTema extends AppCompatActivity {
         Bundle extras = new Bundle();
 
         if (action.compareTo("tornar") == 0) {
-            Intent intent = new Intent(this, TemaListActivity.class);
+            Intent intent = new Intent(this, FlashCardListActivity.class);
             startActivity(intent);
         }
     }

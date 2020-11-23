@@ -1,48 +1,55 @@
-package com.flashcats.ui;
+package com.flashcats.ui.masterDetail;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.Toast;
 
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-
-import com.flashcats.R;
+import com.flashcats.data.FlashCardsRepository;
 import com.flashcats.data.LoginRepository;
-import com.flashcats.data.TemesRepository;
+import com.flashcats.ui.pantalles.admin.PantallaModificarFlashCard;
 import com.flashcats.ui.pantalles.admin.PantallaModificarTema;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import androidx.appcompat.widget.Toolbar;
+
+import android.view.View;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.ActionBar;
+
+import android.view.MenuItem;
+import android.widget.Toast;
+
+import com.flashcats.R;
+
 /**
- * An activity representing a single Tema detail screen. This
+ * An activity representing a single FlashCard detail screen. This
  * activity is only used on narrow width devices. On tablet-size devices,
  * item details are presented side-by-side with a list of items
- * in a {@link TemaListActivity}.
+ * in a {@link FlashCardListActivity}.
  */
-public class TemaDetailActivity extends AppCompatActivity {
+public class FlashCardDetailActivity extends AppCompatActivity {
 
-    //coi del tema del qual es mostren els detalls
-    private String codi_tema;
-    private String nom_user;
     private String clau_sessio;
     private int tipus_usuari;
+    private String codi_tema = "0";
+    private String codi_flashcard = "0";
 
-    private TemesRepository temesRepository;
-
+    private FlashCardsRepository flashCardsRepository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_flashcard_detail);
 
-        nom_user = LoginRepository.getUser().getDisplayName();
+        codi_tema = FlashCardsRepository.codi_tema;
         clau_sessio = LoginRepository.getUser().getUserId();
 
-        temesRepository = new TemesRepository();
+        flashCardsRepository = new FlashCardsRepository();
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.detail_toolbar);
+        setSupportActionBar(toolbar);
 
         if (clau_sessio.startsWith("0")) {
             tipus_usuari = 0; // perfil usuari
@@ -50,31 +57,26 @@ public class TemaDetailActivity extends AppCompatActivity {
             tipus_usuari = 1; // perfil admin
         }
 
-        setContentView(R.layout.activity_tema_detail);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.detail_toolbar);
-        setSupportActionBar(toolbar);
+        FloatingActionButton fab_edit = (FloatingActionButton) findViewById(R.id.float_edit_flashcard);
+        FloatingActionButton fab_del = (FloatingActionButton) findViewById(R.id.float_elimina_flashcard);
 
-        FloatingActionButton float_delete = (FloatingActionButton) findViewById(R.id.float_delete);
-        FloatingActionButton float_edit = (FloatingActionButton) findViewById(R.id.float_edit);
-
-        //si l'usuari no és admin no deixem modificar ni eliminar
-        if (tipus_usuari == 0){
-            float_delete.setVisibility(View.INVISIBLE);
-            float_edit.setVisibility(View.INVISIBLE);
+        if(tipus_usuari == 0){
+            fab_edit.setVisibility(View.INVISIBLE);
+            fab_del.setVisibility(View.INVISIBLE);
         }
 
         // Build an AlertDialog
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
-        float_delete.setOnClickListener(new View.OnClickListener() {
+        fab_del.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
                 // Set a title for alert dialog
-                //builder.setTitle("Eliminar Tema");
+                //builder.setTitle("Eliminar FlashCard");
 
                 // Ask the final question
-                builder.setMessage("Segur que el voleu eliminar?");
+                builder.setMessage("Segur que voleu eliminar?");
 
                 // Set the alert dialog yes button click listener
                 builder.setPositiveButton("Si", new DialogInterface.OnClickListener() {
@@ -82,20 +84,19 @@ public class TemaDetailActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         // Do something when user clicked the Yes button
                         //en teoria un usuari no admin no hauria d'arribar aquí però per si de cas ...
-                        if(tipus_usuari == 1) {
+                        if (tipus_usuari == 1) {
                             int result = -1;
-                            result = temesRepository.eliminaTema(clau_sessio,codi_tema);
+                            result = flashCardsRepository.eliminaFlashCard(clau_sessio, codi_flashcard);
 
                             if (result > -1) {
-                                Toast.makeText(getApplicationContext(), "Tema Eliminat", Toast.LENGTH_LONG).show();
+                                Toast.makeText(getApplicationContext(), "FlashCard Eliminada", Toast.LENGTH_LONG).show();
                             } else if (result == -1) {
                                 Toast.makeText(getApplicationContext(), "Error d'usuari o permisos", Toast.LENGTH_LONG).show();
                             } else if (result == -2) {
-                                Toast.makeText(getApplicationContext(), "No existeix aquest tema", Toast.LENGTH_LONG).show();
+                                Toast.makeText(getApplicationContext(), "No existeix aquesta FlashCard", Toast.LENGTH_LONG).show();
                             } else if (result == -3) {
                                 Toast.makeText(getApplicationContext(), "Error de la Base de Dades", Toast.LENGTH_LONG).show();
                             }
-
                             segPntalla("tornar");
                         } else {
                             Toast.makeText(getApplicationContext(), "L'usuari no té permisos", Toast.LENGTH_LONG).show();
@@ -109,7 +110,7 @@ public class TemaDetailActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         // Do something when No button clicked
                         Toast.makeText(getApplicationContext(),
-                                "Tema No eliminat",Toast.LENGTH_SHORT).show();
+                                "FlashCard No eliminat",Toast.LENGTH_SHORT).show();
                     }
                 });
 
@@ -119,11 +120,9 @@ public class TemaDetailActivity extends AppCompatActivity {
             }
         });
 
-        float_edit.setOnClickListener(new View.OnClickListener() {
+        fab_edit.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                segPntalla("modifica_tema");
-            }
+            public void onClick(View view) {segPntalla("modifica_flashcard");}
         });
 
         // Show the Up button in the action bar.
@@ -138,18 +137,20 @@ public class TemaDetailActivity extends AppCompatActivity {
         // In this case, the fragment will automatically be re-added
         // to its container so we don"t need to manually add it.
         // For more information, see the Fragments API guide at:
+        //
         // http://developer.android.com/guide/components/fragments.html
         //
         if (savedInstanceState == null) {
             // Create the detail fragment and add it to the activity
             // using a fragment transaction.
             Bundle arguments = new Bundle();
-            codi_tema = getIntent().getStringExtra(TemaDetailFragment.ARG_ITEM_ID);
-            arguments.putString(TemaDetailFragment.ARG_ITEM_ID,codi_tema);
-            TemaDetailFragment fragment = new TemaDetailFragment();
+            codi_flashcard = getIntent().getStringExtra(FlashCardDetailFragment.ARG_ITEM_ID);
+            arguments.putString(FlashCardDetailFragment.ARG_ITEM_ID,
+                    getIntent().getStringExtra(FlashCardDetailFragment.ARG_ITEM_ID));
+            FlashCardDetailFragment fragment = new FlashCardDetailFragment();
             fragment.setArguments(arguments);
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.tema_detail_container, fragment)
+                    .add(R.id.flashcard_detail_container, fragment)
                     .commit();
         }
     }
@@ -158,12 +159,7 @@ public class TemaDetailActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == android.R.id.home) {
-            // This ID represents the Home or Up button. In the case of this
-            // activity, the Up button is shown. For
-            // more details, see the Navigation pattern on Android Design:
-            // http://developer.android.com/design/patterns/navigation.html#up-vs-back
-            //
-            navigateUpTo(new Intent(this, TemaListActivity.class));
+            navigateUpTo(new Intent(this, FlashCardListActivity.class));
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -173,14 +169,16 @@ public class TemaDetailActivity extends AppCompatActivity {
 
         Bundle extras = new Bundle();
 
-        if (action.compareTo("modifica_tema") == 0) {
-            Intent intent = new Intent(this, PantallaModificarTema.class);
-            // passem a la següent pantalla codi del tema seleccionat
-            extras.putString("param1", codi_tema);
+        if (action.compareTo("modifica_flashcard") == 0) {
+            Intent intent = new Intent(this, PantallaModificarFlashCard.class);
+            // passem a la següent pantalla codi de la flashcard seleccionada
+            extras.putString("param1", codi_flashcard);
             intent.putExtras(extras);
             startActivity(intent);
         } else if (action.compareTo("tornar") == 0) {
-            Intent intent = new Intent(this, TemaListActivity.class);
+            Intent intent = new Intent(this, FlashCardListActivity.class);
+            /*extras.putString("param1", codi_tema);
+            intent.putExtras(extras);*/
             startActivity(intent);
         }
     }

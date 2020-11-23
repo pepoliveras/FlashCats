@@ -1,6 +1,7 @@
 package com.flashcats.data.model;
 
 import java.nio.ByteBuffer;
+import java.util.ArrayList;
 
 /* *
  * Classe que representa i emmagatzema la informació de els FlashCards de l'aplicació
@@ -8,11 +9,14 @@ import java.nio.ByteBuffer;
  * */
 public class FlashCard {
 
-    private int codi;
-    private int codi_tema;
+    private String codi;
+    private String codi_tema;
     private String anvers_text;
-    private String anvers_multimedia;
     private String revers_text;
+    private String anvers_multimedia;
+    private String tipus_arxiu_multimedia;
+
+    private ArrayList<String> tags;
 
     @Override
     public String toString() {
@@ -25,27 +29,26 @@ public class FlashCard {
     }
 
     // Constructor de la Classe FlashCard amb inicialització de paràmetres
-    public FlashCard(int codi_param, int codi_tema_param, String anvers_text_param, String anvers_multimedia_param, String revers_text_param) {
+    public FlashCard(String codi_param, String codi_tema_param, String anvers_text_param, String revers_text_param) {
         this.codi = codi_param;
         this.codi_tema = codi_tema_param;
         this.anvers_text = anvers_text_param;
-        this.anvers_multimedia = anvers_multimedia_param;
         this.revers_text = revers_text_param;
     }
 
-    public int getCodi() {
+    public String getCodi() {
         return codi;
     }
 
-    public void setCodi(int codi) {
+    public void setCodi(String codi) {
         this.codi = codi;
     }
 
-    public int getCodi_tema() {
+    public String getCodi_tema() {
         return codi_tema;
     }
 
-    public void setCodi_tema(int codi_tema) {
+    public void setCodi_tema(String codi_tema) {
         this.codi_tema = codi_tema;
     }
 
@@ -57,14 +60,6 @@ public class FlashCard {
         this.anvers_text = anvers_text;
     }
 
-    public String getAnvers_multimedia() {
-        return anvers_multimedia;
-    }
-
-    public void setAnvers_multimedia(String anvers_multimedia) {
-        this.anvers_multimedia = anvers_multimedia;
-    }
-
     public String getRevers_text() {
         return revers_text;
     }
@@ -72,4 +67,18 @@ public class FlashCard {
     public void setRevers_text(String revers_text) {
         this.revers_text = revers_text;
     }
+
+    public String getAnvers_multimedia() {
+        return anvers_multimedia;
+    }
+
+    public void setAnvers_multimedia(String anvers_multimedia) { this.anvers_multimedia = anvers_multimedia; }
+
+    public String getTipus_arxiu_multimedia() { return tipus_arxiu_multimedia; }
+
+    public void setTipus_arxiu_multimedia(String tipus_arxiu_multimedia) { this.tipus_arxiu_multimedia = tipus_arxiu_multimedia; }
+
+    public ArrayList<String> getTags() { return tags; }
+
+    public void setTags(ArrayList<String> tags) { this.tags = tags; }
 }

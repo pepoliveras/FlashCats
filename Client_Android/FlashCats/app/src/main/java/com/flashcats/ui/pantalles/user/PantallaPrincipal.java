@@ -1,4 +1,4 @@
-package com.flashcats.ui.pantalles;
+package com.flashcats.ui.pantalles.user;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
@@ -13,10 +13,12 @@ import android.widget.Toast;
 import com.flashcats.R;
 import com.flashcats.data.LoginRepository;
 import com.flashcats.data.TemesRepository;
-import com.flashcats.ui.TemaListActivity;
+import com.flashcats.ui.masterDetail.TemaListActivity;
 import com.flashcats.ui.login.LoginActivity;
 import com.flashcats.ui.login.LoginViewModel;
 import com.flashcats.ui.login.LoginViewModelFactory;
+import com.flashcats.ui.pantalles.admin.PantallaConfigUsuaris;
+import com.google.android.material.snackbar.Snackbar;
 
 public class PantallaPrincipal extends AppCompatActivity {
 
@@ -25,13 +27,12 @@ public class PantallaPrincipal extends AppCompatActivity {
     private String nom_user;
 
     private LoginViewModel loginViewModel;
-    private TemesRepository temesViewModel;
+    private TemesRepository temesRepository;
 
     private Button logout_Button;
     private Button button_temes;
     private Button button_continuar;
     private Button button_config;
-    private Button button_flashcards;
 
     private TextView nom_usuari;
 
@@ -42,14 +43,13 @@ public class PantallaPrincipal extends AppCompatActivity {
 
         loginViewModel = new ViewModelProvider(this, new LoginViewModelFactory())
                 .get(LoginViewModel.class);
-        temesViewModel = new TemesRepository();
+        temesRepository = new TemesRepository();
 
         nom_usuari = findViewById(R.id.nom_usuari);
         logout_Button = findViewById(R.id.logoutButton);
         button_temes = findViewById(R.id.button_temes);
         button_continuar = findViewById(R.id.button_continuar);
         button_config = findViewById(R.id.button_config);
-        button_flashcards = findViewById(R.id.button_flashcards);
 
         //recuperem nom d'usuari clau de sessió i inicialitzem tipus d'usuari segons convingui
         nom_user = LoginRepository.getUser().getDisplayName();
@@ -65,13 +65,11 @@ public class PantallaPrincipal extends AppCompatActivity {
         //Inicialitzem la visibilitat del buttons segons el prefil d'usuari loggejat
         if(tipus_usuari == 0) {
             button_config.setVisibility(View.INVISIBLE);
-            button_flashcards.setVisibility(View.INVISIBLE);
             button_temes.setVisibility(View.VISIBLE);
             button_continuar.setVisibility(View.VISIBLE);
         } else if(tipus_usuari == 1){
             button_continuar.setVisibility(View.INVISIBLE);
             button_config.setVisibility(View.VISIBLE);
-            button_flashcards.setVisibility(View.VISIBLE);
             button_temes.setVisibility(View.VISIBLE);
         }
 
@@ -94,28 +92,17 @@ public class PantallaPrincipal extends AppCompatActivity {
         button_config.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                segPntalla("config_admin");
+                segPntalla("config_usuaris");
             }
         });
 
         button_continuar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                temesViewModel.numTemes(clau_sessio);
-                temesViewModel.obtenirTemes(clau_sessio);
-                segPntalla("continuar");
-            }
+                Snackbar.make(v, "Continuem a partir d'on ens hem quedat en la dearrera sessió", Snackbar.LENGTH_LONG)
+                        .setAction("Continuar", null).show();
+                segPntalla("continuar"); }
         });
-
-        button_flashcards.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                temesViewModel.numTemes(clau_sessio);
-                temesViewModel.obtenirTemes(clau_sessio);
-                segPntalla("llista_flashcards");
-            }
-        });
-
     }
 
     private void segPntalla(String action) {
@@ -130,13 +117,13 @@ public class PantallaPrincipal extends AppCompatActivity {
             Intent intent = new Intent(this, TemaListActivity.class);
             Toast.makeText(getApplicationContext(), "Selecció de Temes", Toast.LENGTH_LONG).show();
             startActivity(intent);
-        } else if (action.compareTo("config_admin")==0) {
-            //Intent intent = new Intent(this, PantallaAdminTemes.class);
+        } else if (action.compareTo("config_usuaris")==0) {
+            Intent intent = new Intent(this, PantallaConfigUsuaris.class);
             Toast.makeText(getApplicationContext(), "Configuració d'usuaris", Toast.LENGTH_LONG).show();
-            //startActivity(intent);
-        } else if (action.compareTo("llista_flashcards")==0) {
-            //Intent intent = new Intent(this, PantallaAdminTemes.class);
-            Toast.makeText(getApplicationContext(), "Llista de FlashCards", Toast.LENGTH_LONG).show();
+            startActivity(intent);
+        } else if (action.compareTo("continuar")==0) {
+            //Intent intent = new Intent(this, FlashCardListActivity.class);
+            //Toast.makeText(getApplicationContext(), "Llista de FlashCards", Toast.LENGTH_LONG).show();
             //startActivity(intent);
         }
     }

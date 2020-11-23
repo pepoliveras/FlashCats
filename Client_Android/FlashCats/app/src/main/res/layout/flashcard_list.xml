@@ -2,12 +2,12 @@
 <androidx.recyclerview.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/tema_list"
-    android:name="com.flashcats.TemaListFragment"
+    android:id="@+id/flashcard_list"
+    android:name="com.flashcats.ui.FlashCardListFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_marginLeft="16dp"
     android:layout_marginRight="16dp"
     app:layoutManager="LinearLayoutManager"
-    tools:context=".ui.masterDetail.TemaListActivity"
-    tools:listitem="@layout/tema_list_content" />
+    tools:context=".ui.masterDetail.FlashCardListActivity"
+    tools:listitem="@layout/flashcard_list_content" />

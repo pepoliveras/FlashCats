@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context=".ui.masterDetail.TemaDetailActivity"
+    tools:context=".ui.masterDetail.FlashCardDetailActivity"
     tools:ignore="MergeRootFrame">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -36,44 +36,31 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.core.widget.NestedScrollView
-        android:id="@+id/tema_detail_container"
+        android:id="@+id/flashcard_detail_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/float_edit_tema"
-        android:layout_width="168dp"
+        android:id="@+id/float_edit_flashcard"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="right|top"
-        android:layout_margin="32dp"
-        android:clickable="true"
-        app:layout_anchorGravity="start|right|top"
+        android:layout_gravity="center_vertical|start"
+        android:layout_marginEnd="32dp"
+        android:layout_marginRight="32dp"
+        app:layout_anchor="@+id/flashcard_detail_container"
+        app:layout_anchorGravity="top|end"
         app:srcCompat="@android:drawable/ic_menu_edit" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/float_delete_tema"
-        android:layout_width="284dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|right"
-        android:layout_margin="32dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginRight="32dp"
-        android:clickable="true"
-        android:contentDescription="Esborrar Tema"
-        app:layout_anchorGravity="bottom"
-        app:srcCompat="@android:drawable/ic_menu_delete" />
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/float_start_tema"
+        android:id="@+id/float_elimina_flashcard"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="right|top"
         android:layout_marginEnd="32dp"
         android:layout_marginRight="32dp"
         android:clickable="true"
-        app:layout_anchor="@+id/tema_detail_container"
-        app:layout_anchorGravity="end|top"
-        app:srcCompat="@android:drawable/ic_media_play" />
+        app:layout_anchor="@+id/app_bar"
+        app:layout_anchorGravity="end|center"
+        app:srcCompat="@android:drawable/ic_menu_delete" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

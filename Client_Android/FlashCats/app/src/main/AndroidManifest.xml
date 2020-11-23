@@ -12,22 +12,38 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.FlashCats"
         android:usesCleartextTraffic="true">
-        <activity android:name=".ui.pantalles.admin.PantallaModificarTema"></activity>
-        <activity android:name=".ui.pantalles.admin.PantallaAfegirTema" />
+        <activity android:name=".ui.pantalles.admin.PantallaModificarFlashCard"></activity>
+        <activity android:name=".ui.pantalles.admin.PantallaAfegirFlashCard" />
+        <activity android:name=".ui.pantalles.admin.PantallaConfigUsuaris" />
         <activity
-            android:name=".ui.TemaListActivity"
-            android:label="@string/title_tema_list"
+            android:name=".ui.masterDetail.FlashCardListActivity"
+            android:label="@string/title_flashcard_list"
             android:theme="@style/Theme.FlashCats.NoActionBar" />
         <activity
-            android:name=".ui.TemaDetailActivity"
-            android:label="@string/title_tema_detail"
-            android:parentActivityName=".ui.TemaListActivity"
+            android:name=".ui.masterDetail.FlashCardDetailActivity"
+            android:label="@string/title_flashcard_detail"
+            android:parentActivityName=".ui.masterDetail.FlashCardListActivity"
             android:theme="@style/Theme.FlashCats.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.flashcats.ui.TemaListActivity" />
+                android:value="com.flashcats.ui.masterDetail.FlashCardListActivity" />
         </activity>
-        <activity android:name=".ui.pantalles.PantallaPrincipal" />
+        <activity android:name=".ui.pantalles.admin.PantallaModificarTema" />
+        <activity android:name=".ui.pantalles.admin.PantallaAfegirTema" />
+        <activity
+            android:name=".ui.masterDetail.TemaListActivity"
+            android:label="@string/title_tema_list"
+            android:theme="@style/Theme.FlashCats.NoActionBar" />
+        <activity
+            android:name=".ui.masterDetail.TemaDetailActivity"
+            android:label="@string/title_tema_detail"
+            android:parentActivityName=".ui.masterDetail.TemaListActivity"
+            android:theme="@style/Theme.FlashCats.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.flashcats.ui.masterDetail.TemaListActivity" />
+        </activity>
+        <activity android:name=".ui.pantalles.user.PantallaPrincipal" />
         <activity
             android:name=".ui.login.LoginActivity"
             android:label="@string/title_activity_login">
